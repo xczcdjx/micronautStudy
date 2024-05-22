@@ -5,7 +5,9 @@ import io.micronaut.http.MediaType
 import io.micronaut.http.annotation.Controller
 import io.micronaut.http.annotation.Get
 import io.micronaut.http.annotation.Produces
+import io.micronaut.serde.annotation.Serdeable
 import io.swagger.v3.oas.annotations.Operation
+import io.swagger.v3.oas.annotations.media.Schema
 import io.swagger.v3.oas.annotations.responses.ApiResponse
 import io.swagger.v3.oas.annotations.tags.Tag
 import jakarta.inject.Inject
@@ -24,18 +26,35 @@ object User : Table<Nothing>("user") {
     val sex = varchar("sex")
 }
 
-@Introspected
-data class ReUser(val id:Int,val name:String,val sex:String)
-@Introspected
-data class ResU(val users:List<ReUser>)
+@Serdeable
+data class ReUser(
+    @Schema(description = "用户ID", example = "1")
+    val id: Int,
+    @Schema(description = "用户名", example = "John Doe")
+    val name: String,
+    @Schema(description = "用户性别", example = "男")
+    val sex: String
+)
+
+@Serdeable
+data class ResU(
+    @Schema(description = "用户")
+    val users: List<ReUser>)
+
+data class Res(
+    val msg:String="success",
+    val data:Any,
+    val code:Int=200
+)
+
 @Tag(name = "Todo")
 @Controller("/todo")
-open class HelloController(@Inject private val con:Database) {
+open class HelloController(@Inject private val con: Database) {
     @Get(uri = "/hello")
     @Operation(summary = "test", description = "hello")
     @Produces(MediaType.APPLICATION_JSON)
     open fun index(): ResU {
-        val res=con.from(User).select().map { row ->
+        val res = con.from(User).select().map { row ->
             ReUser(
                 id = row[User.id]!!,
                 name = row[User.name]!!,
