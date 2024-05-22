@@ -11,7 +11,7 @@ plugins {
 version = "0.1"
 group = "com.example"
 
-val kotlinVersion=project.properties.get("kotlinVersion")
+val kotlinVersion = project.properties.get("kotlinVersion")
 repositories {
     mavenCentral()
 }
@@ -31,6 +31,13 @@ dependencies {
     kapt("io.micronaut.openapi:micronaut-openapi:4.5.2")
     compileOnly("io.micronaut.openapi:micronaut-openapi-annotations")
     runtimeOnly("org.yaml:snakeyaml") //保持yml文件读取
+
+    // Ktorm ORM
+    implementation("org.ktorm:ktorm-core:3.4.1")
+    implementation("org.ktorm:ktorm-support-mysql:3.4.1")
+
+    // MySQL JDBC Driver
+    runtimeOnly("mysql:mysql-connector-java")
 }
 
 
@@ -51,8 +58,8 @@ micronaut {
         annotations("com.example.*")
     }
     aot {
-    // Please review carefully the optimizations enabled below
-    // Check https://micronaut-projects.github.io/micronaut-aot/latest/guide/ for more details
+        // Please review carefully the optimizations enabled below
+        // Check https://micronaut-projects.github.io/micronaut-aot/latest/guide/ for more details
         optimizeServiceLoading = false
         convertYamlToJava = false
         precomputeOperations = true
