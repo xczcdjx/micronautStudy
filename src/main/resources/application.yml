@@ -1,0 +1,13 @@
+micronaut:
+  application:
+    name: demoKt
+  server:
+    port: 7701
+  router:
+    static-resources:
+      swagger:
+        paths: classpath:META-INF/swagger
+        mapping: /swagger/**
+      swagger-ui:
+        paths: classpath:META-INF/swagger/views/swagger-ui
+        mapping: /swagger-ui/**
